@@ -19,6 +19,7 @@ export class WebsocketService {
     this.socket.on( 'connect', () => {
       console.log('Conectado al servidor');
       this.socketStatus = true;
+      this.cargarStorage();
     });
 
     this.socket.on( 'disconnect', () => {
@@ -43,6 +44,19 @@ export class WebsocketService {
         resolve();
       })
     });
+  }
+
+  logoutWS(){
+    // Reseteo en local
+    this.usuario = null;
+    localStorage.removeItem('usuario');
+
+    // Reseteo en servidor
+    const payload = {
+      nombre: 'sin-nombre'
+    };
+    this.emit('configurar-usuario', payload, () => {} );
+
   }
 
   guardarStorage(){
